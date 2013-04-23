@@ -1,0 +1,15 @@
+Java class server plus wrapper.
+
+Quick Start:
+  ant jar
+  java -jar dist/ClassServer.jar edu/msu/cme/rdp/classloader/server/ClassServer &
+  #Edit the cafe script to point to the ClassServer jar
+  ./cafe
+
+The class server scans the directories supplied on the class path for *.jar and *.class files and loads the class bytecode and classpath resources to be served via a custom binary protocol to clients over a socket.  Directories can be ignore via a configuration option in
+     src/props/ClassCodeStore.properties
+By default only *.class files that have a directory 'classes' some where in the path name will be loaded.
+
+The cafe script wraps the default java command to set RDPClassLoader as the system class loader and inject RDPClassLoader as the MainClass.  RDPClassLoader handles looking up the main class the user supplies as a command line argument to the cafe command.  If an exact name match for the class supplied cannot be found RDPClassLoader will query the ClassServer for all know classes with a main method and perform an edit distance calculation.  If a single class matches the relative name that class will be loaded as the main class, otherwise the top matches are returned.
+
+cafe assumes that everything preceeding the first non-option (tokens prepended with a -) are meant to be passed to the java command as is.  The first argument is assumed to be the main class, and the rest are passed as command line arguments.

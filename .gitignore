@@ -1,0 +1,6 @@
+private/
+build/
+dist/
+*~
+*.fasta
+.svn
